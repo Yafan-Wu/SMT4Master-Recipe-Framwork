@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-model href="Schema/AllSchemas.xsd" ?>
+<b2mml:GRecipe xmlns:b2mml="http://www.mesa.org/xml/B2MML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.mesa.org/xml/B2MML ">
+  <b2mml:ID>GeneralRecipe001</b2mml:ID>
+  <b2mml:Description>General Recipe of a mixing and heating proces</b2mml:Description>
+  <b2mml:GRecipeType>General</b2mml:GRecipeType>
+  <b2mml:LifeCycleState>Draft</b2mml:LifeCycleState>
+
+  <b2mml:Formula>
+    <b2mml:Description>The formula defines the Inputs, Intermediates and Outputs of the Procedure</b2mml:Description>
+
+    <b2mml:ProcessInputs>
+      <b2mml:ID>InputListID001</b2mml:ID>
+      <b2mml:Description>List of Process Inputs</b2mml:Description>
+      <b2mml:MaterialsType>Input</b2mml:MaterialsType>
+
+      <b2mml:Material>
+        <b2mml:ID>Educt001</b2mml:ID>
+        <b2mml:Description>Water</b2mml:Description>
+        <b2mml:MaterialID schemeAgencyName="GESTIS" schemeName="CAS">7732-18-5</b2mml:MaterialID>
+        <b2mml:Order>1</b2mml:Order>
+        <b2mml:Amount>
+          <b2mml:QuantityString>5.0</b2mml:QuantityString>
+          <b2mml:DataType>double</b2mml:DataType>
+          <b2mml:UnitOfMeasure>http://si-digital-framework.org/SI/units/litre</b2mml:UnitOfMeasure>
+          <b2mml:Key>http://qudt.org/vocab/quantitykind/LiquidVolume</b2mml:Key>
+        </b2mml:Amount>
+      </b2mml:Material>
+
+      <b2mml:Material>
+        <b2mml:ID>Educt002</b2mml:ID>
+        <b2mml:Description>Water</b2mml:Description>
+        <b2mml:MaterialID schemeAgencyName="GESTIS" schemeName="CAS">7732-18-5</b2mml:MaterialID>
+        <b2mml:Order>2</b2mml:Order>
+        <b2mml:Amount>
+          <b2mml:QuantityString>3.0</b2mml:QuantityString>
+          <b2mml:DataType>double</b2mml:DataType>
+          <b2mml:UnitOfMeasure>http://si-digital-framework.org/SI/units/litre</b2mml:UnitOfMeasure>
+          <b2mml:Key>http://qudt.org/vocab/quantitykind/LiquidVolume</b2mml:Key>
+        </b2mml:Amount>
+      </b2mml:Material>
+    </b2mml:ProcessInputs>
+
+    <b2mml:ProcessOutputs>
+      <b2mml:ID>OutputListID001</b2mml:ID>
+      <b2mml:Description>List of Process Outputs</b2mml:Description>
+      <b2mml:MaterialsType>Output</b2mml:MaterialsType>
+      <b2mml:Material>
+        <b2mml:ID>Product001</b2mml:ID>
+        <b2mml:Description>Mixed, heated and dosed water</b2mml:Description>
+        <b2mml:MaterialID schemeAgencyName="GESTIS" schemeName="CAS">7732-18-5</b2mml:MaterialID>
+        <b2mml:Order>1</b2mml:Order>
+        <b2mml:Amount>
+          <b2mml:QuantityString>8.0</b2mml:QuantityString>
+          <b2mml:DataType>double</b2mml:DataType>
+          <b2mml:UnitOfMeasure>http://si-digital-framework.org/SI/units/litre</b2mml:UnitOfMeasure>
+          <b2mml:Key>http://qudt.org/vocab/quantitykind/LiquidVolume</b2mml:Key>
+        </b2mml:Amount>
+      </b2mml:Material>
+    </b2mml:ProcessOutputs>
+
+    <b2mml:ProcessIntermediates>
+      <b2mml:ID>IntermediateListID001</b2mml:ID>
+      <b2mml:Description>List of Process Intermediates</b2mml:Description>
+      <b2mml:MaterialsType>Intermediate</b2mml:MaterialsType>
+
+      <b2mml:Material>
+        <b2mml:ID>Intermediate001</b2mml:ID>
+        <b2mml:Description>Mixed water</b2mml:Description>
+        <b2mml:MaterialID schemeAgencyName="GESTIS" schemeName="CAS">7732-18-5</b2mml:MaterialID>
+        <b2mml:Order>1</b2mml:Order>
+        <b2mml:Amount>
+          <b2mml:QuantityString>8.0</b2mml:QuantityString>
+          <b2mml:DataType>double</b2mml:DataType>
+          <b2mml:UnitOfMeasure>http://si-digital-framework.org/SI/units/litre</b2mml:UnitOfMeasure>
+          <b2mml:Key>http://qudt.org/vocab/quantitykind/LiquidVolume</b2mml:Key>
+        </b2mml:Amount>
+      </b2mml:Material>
+
+      <b2mml:Material>
+        <b2mml:ID>Intermediate002</b2mml:ID>
+        <b2mml:Description>Dosed Water for heating</b2mml:Description>
+        <b2mml:MaterialID schemeAgencyName="GESTIS" schemeName="CAS">7732-18-5</b2mml:MaterialID>
+        <b2mml:Order>2</b2mml:Order>
+        <b2mml:Amount>
+          <b2mml:QuantityString>8.0</b2mml:QuantityString>
+          <b2mml:DataType>double</b2mml:DataType>
+          <b2mml:UnitOfMeasure>http://si-digital-framework.org/SI/units/litre</b2mml:UnitOfMeasure>
+          <b2mml:Key>http://qudt.org/vocab/quantitykind/LiquidVolume</b2mml:Key>
+        </b2mml:Amount>
+      </b2mml:Material>
+
+      <!-- NEW: output of heating / input of final dosing -->
+      <b2mml:Material>
+        <b2mml:ID>Intermediate003</b2mml:ID>
+        <b2mml:Description>Heated water for final dosing</b2mml:Description>
+        <b2mml:MaterialID schemeAgencyName="GESTIS" schemeName="CAS">7732-18-5</b2mml:MaterialID>
+        <b2mml:Order>3</b2mml:Order>
+        <b2mml:Amount>
+          <b2mml:QuantityString>8.0</b2mml:QuantityString>
+          <b2mml:DataType>double</b2mml:DataType>
+          <b2mml:UnitOfMeasure>http://si-digital-framework.org/SI/units/litre</b2mml:UnitOfMeasure>
+          <b2mml:Key>http://qudt.org/vocab/quantitykind/LiquidVolume</b2mml:Key>
+        </b2mml:Amount>
+      </b2mml:Material>
+
+    </b2mml:ProcessIntermediates>
+  </b2mml:Formula>
+
+  <b2mml:ProcessProcedure>
+    <b2mml:ID>ProcessProcedureID001</b2mml:ID>
+    <b2mml:Description>This is the top level ProcessElement</b2mml:Description>
+    <b2mml:ProcessElementType>Process</b2mml:ProcessElementType>
+    <b2mml:LifeCycleState>Draft</b2mml:LifeCycleState>
+
+    <b2mml:Materials>
+      <b2mml:ID>Procedure1InputMaterials</b2mml:ID>
+      <b2mml:Description>Input Materials of ProcessProcedure1</b2mml:Description>
+      <b2mml:MaterialsType>Input</b2mml:MaterialsType>
+      <b2mml:Material><b2mml:ID>Educt001</b2mml:ID></b2mml:Material>
+      <b2mml:Material><b2mml:ID>Educt002</b2mml:ID></b2mml:Material>
+    </b2mml:Materials>
+
+    <b2mml:Materials>
+      <b2mml:ID>Procedure1IntermediateMaterials</b2mml:ID>
+      <b2mml:Description>Intermediate Materials of ProcessProcedure1</b2mml:Description>
+      <b2mml:MaterialsType>Intermediate</b2mml:MaterialsType>
+      <b2mml:Material><b2mml:ID>Intermediate001</b2mml:ID></b2mml:Material>
+      <b2mml:Material><b2mml:ID>Intermediate002</b2mml:ID></b2mml:Material>
+      <b2mml:Material><b2mml:ID>Intermediate003</b2mml:ID></b2mml:Material>
+    </b2mml:Materials>
+
+    <b2mml:Materials>
+      <b2mml:ID>Procedure1OutputMaterials</b2mml:ID>
+      <b2mml:Description>Output Materials of ProcessProcedure1</b2mml:Description>
+      <b2mml:MaterialsType>Output</b2mml:MaterialsType>
+      <b2mml:Material><b2mml:ID>Product001</b2mml:ID></b2mml:Material>
+    </b2mml:Materials>
+
+    <b2mml:DirectedLink>
+      <b2mml:ID>0</b2mml:ID>
+      <b2mml:FromID>Educt001</b2mml:FromID>
+      <b2mml:ToID>Mixing_of_Liquids001</b2mml:ToID>
+    </b2mml:DirectedLink>
+    <b2mml:DirectedLink>
+      <b2mml:ID>1</b2mml:ID>
+      <b2mml:FromID>Educt002</b2mml:FromID>
+      <b2mml:ToID>Mixing_of_Liquids001</b2mml:ToID>
+    </b2mml:DirectedLink>
+    <b2mml:DirectedLink>
+      <b2mml:ID>2</b2mml:ID>
+      <b2mml:FromID>Mixing_of_Liquids001</b2mml:FromID>
+      <b2mml:ToID>Intermediate001</b2mml:ToID>
+    </b2mml:DirectedLink>
+    <b2mml:DirectedLink>
+      <b2mml:ID>3</b2mml:ID>
+      <b2mml:FromID>Intermediate001</b2mml:FromID>
+      <b2mml:ToID>Dosing001</b2mml:ToID>
+    </b2mml:DirectedLink>
+    <b2mml:DirectedLink>
+      <b2mml:ID>4</b2mml:ID>
+      <b2mml:FromID>Dosing001</b2mml:FromID>
+      <b2mml:ToID>Intermediate002</b2mml:ToID>
+    </b2mml:DirectedLink>
+    <b2mml:DirectedLink>
+      <b2mml:ID>5</b2mml:ID>
+      <b2mml:FromID>Intermediate002</b2mml:FromID>
+      <b2mml:ToID>Heating_of_liquids001</b2mml:ToID>
+    </b2mml:DirectedLink>
+
+    <!-- UPDATED: heating -> intermediate003 -> dosing002 -> product -->
+    <b2mml:DirectedLink>
+      <b2mml:ID>6</b2mml:ID>
+      <b2mml:FromID>Heating_of_liquids001</b2mml:FromID>
+      <b2mml:ToID>Intermediate003</b2mml:ToID>
+    </b2mml:DirectedLink>
+    <b2mml:DirectedLink>
+      <b2mml:ID>7</b2mml:ID>
+      <b2mml:FromID>Intermediate003</b2mml:FromID>
+      <b2mml:ToID>Dosing002</b2mml:ToID>
+    </b2mml:DirectedLink>
+    <b2mml:DirectedLink>
+      <b2mml:ID>8</b2mml:ID>
+      <b2mml:FromID>Dosing002</b2mml:FromID>
+      <b2mml:ToID>Product001</b2mml:ToID>
+    </b2mml:DirectedLink>
+
+    <b2mml:ProcessElement>
+      <b2mml:ID>Mixing_of_Liquids001</b2mml:ID>
+      <b2mml:Description>Mixing_of_Liquids</b2mml:Description>
+      <b2mml:ProcessElementType>Process</b2mml:ProcessElementType>
+
+      <b2mml:Materials>
+        <b2mml:ID>Mixing_of_Liquids001InputMaterials</b2mml:ID>
+        <b2mml:Description>Input Materials of ProcessMixing_of_Liquids001</b2mml:Description>
+        <b2mml:MaterialsType>Input</b2mml:MaterialsType>
+      </b2mml:Materials>
+      <b2mml:Materials>
+        <b2mml:ID>Mixing_of_Liquids001IntermediateMaterials</b2mml:ID>
+        <b2mml:Description>Intermediate Materials of ProcessMixing_of_Liquids001</b2mml:Description>
+        <b2mml:MaterialsType>Intermediate</b2mml:MaterialsType>
+      </b2mml:Materials>
+      <b2mml:Materials>
+        <b2mml:ID>Mixing_of_Liquids001OutputMaterials</b2mml:ID>
+        <b2mml:Description>Output Materials of ProcessMixing_of_Liquids001</b2mml:Description>
+        <b2mml:MaterialsType>Output</b2mml:MaterialsType>
+      </b2mml:Materials>
+
+      <b2mml:ProcessElementParameter>
+        <b2mml:ID>Revolutions_per_minute001</b2mml:ID>
+        <b2mml:Description>Revolutions per minute</b2mml:Description>
+        <b2mml:Value>
+          <b2mml:ValueString>200</b2mml:ValueString>
+          <b2mml:DataType>int</b2mml:DataType>
+          <b2mml:UnitOfMeasure>http://qudt.org/vocab/unit/REV-PER-MIN</b2mml:UnitOfMeasure>
+          <b2mml:Key>http://qudt.org/vocab/quantitykind/RotationalVelocity</b2mml:Key>
+        </b2mml:Value>
+      </b2mml:ProcessElementParameter>
+
+      <b2mml:ProcessElementParameter>
+        <b2mml:ID>Mixing_Duration001</b2mml:ID>
+        <b2mml:Description>Duration of the process step mixing</b2mml:Description>
+        <b2mml:Value>
+          <b2mml:ValueString>15</b2mml:ValueString>
+          <b2mml:DataType>int</b2mml:DataType>
+          <b2mml:UnitOfMeasure>http://si-digital-framework.org/SI/units/second</b2mml:UnitOfMeasure>
+          <b2mml:Key>http://www.w3.org/2006/time#Duration</b2mml:Key>
+        </b2mml:Value>
+      </b2mml:ProcessElementParameter>
+
+      <b2mml:OtherInformation>
+        <b2mml:OtherInfoID>SemanticDescription</b2mml:OtherInfoID>
+        <b2mml:Description>URI referencing the Ontology Class definition</b2mml:Description>
+        <b2mml:OtherValue>
+          <b2mml:ValueString>http://www.iat.rwth-aachen.de/capability-ontology#MixingOfLiquids</b2mml:ValueString>
+          <b2mml:DataType>uriReference</b2mml:DataType>
+          <b2mml:Key>Capability_with_Query.Mixing_of_Liquids</b2mml:Key>
+        </b2mml:OtherValue>
+      </b2mml:OtherInformation>
+    </b2mml:ProcessElement>
+
+    <b2mml:ProcessElement>
+      <b2mml:ID>Dosing001</b2mml:ID>
+      <b2mml:Description>Dosing</b2mml:Description>
+      <b2mml:ProcessElementType>Process</b2mml:ProcessElementType>
+
+      <b2mml:Materials>
+        <b2mml:ID>Dosing001InputMaterials</b2mml:ID>
+        <b2mml:Description>Input Materials of ProcessDosing001</b2mml:Description>
+        <b2mml:MaterialsType>Input</b2mml:MaterialsType>
+      </b2mml:Materials>
+      <b2mml:Materials>
+        <b2mml:ID>Dosing001IntermediateMaterials</b2mml:ID>
+        <b2mml:Description>Intermediate Materials of ProcessDosing001</b2mml:Description>
+        <b2mml:MaterialsType>Intermediate</b2mml:MaterialsType>
+      </b2mml:Materials>
+      <b2mml:Materials>
+        <b2mml:ID>Dosing001OutputMaterials</b2mml:ID>
+        <b2mml:Description>Output Materials of ProcessDosing001</b2mml:Description>
+        <b2mml:MaterialsType>Output</b2mml:MaterialsType>
+      </b2mml:Materials>
+
+      <b2mml:ProcessElementParameter>
+        <b2mml:ID>Dosing_Amount001</b2mml:ID>
+        <b2mml:Description>Amount of Dosing</b2mml:Description>
+        <b2mml:Value>
+          <b2mml:ValueString>8.0</b2mml:ValueString>
+          <b2mml:DataType>double</b2mml:DataType>
+          <b2mml:UnitOfMeasure>http://si-digital-framework.org/SI/units/litre</b2mml:UnitOfMeasure>
+          <b2mml:Key>http://qudt.org/vocab/quantitykind/LiquidVolume</b2mml:Key>
+        </b2mml:Value>
+      </b2mml:ProcessElementParameter>
+
+      <b2mml:OtherInformation>
+        <b2mml:OtherInfoID>SemanticDescription</b2mml:OtherInfoID>
+        <b2mml:Description>URI referencing the Ontology Class definition</b2mml:Description>
+        <b2mml:OtherValue>
+          <b2mml:ValueString>http://css.iat.rwth-aachen.de/OntoProCap#Dosing</b2mml:ValueString>
+          <b2mml:DataType>uriReference</b2mml:DataType>
+          <b2mml:Key>Capability_with_Query.Dosing</b2mml:Key>
+        </b2mml:OtherValue>
+      </b2mml:OtherInformation>
+    </b2mml:ProcessElement>
+
+    <b2mml:ProcessElement>
+      <b2mml:ID>Heating_of_liquids001</b2mml:ID>
+      <b2mml:Description>Heating_of_liquids</b2mml:Description>
+      <b2mml:ProcessElementType>Process</b2mml:ProcessElementType>
+
+      <b2mml:Materials>
+        <b2mml:ID>Heating_of_liquids001InputMaterials</b2mml:ID>
+        <b2mml:Description>Input Materials of ProcessHeating_of_liquids001</b2mml:Description>
+        <b2mml:MaterialsType>Input</b2mml:MaterialsType>
+      </b2mml:Materials>
+      <b2mml:Materials>
+        <b2mml:ID>Heating_of_liquids001IntermediateMaterials</b2mml:ID>
+        <b2mml:Description>Intermediate Materials of ProcessHeating_of_liquids001</b2mml:Description>
+        <b2mml:MaterialsType>Intermediate</b2mml:MaterialsType>
+      </b2mml:Materials>
+      <b2mml:Materials>
+        <b2mml:ID>Heating_of_liquids001OutputMaterials</b2mml:ID>
+        <b2mml:Description>Output Materials of ProcessHeating_of_liquids001</b2mml:Description>
+        <b2mml:MaterialsType>Output</b2mml:MaterialsType>
+      </b2mml:Materials>
+
+      <b2mml:ProcessElementParameter>
+        <b2mml:ID>Temperature_Heating001</b2mml:ID>
+        <b2mml:Description>Set heating temperature to reach materials temperature</b2mml:Description>
+        <b2mml:Value>
+          <b2mml:ValueString>&gt;=27.0</b2mml:ValueString>
+          <b2mml:DataType>double</b2mml:DataType>
+          <b2mml:UnitOfMeasure>http://si-digital-framework.org/SI/units/degreeCelsius</b2mml:UnitOfMeasure>
+          <b2mml:Key>http://qudt.org/vocab/quantitykind/Temperature</b2mml:Key>
+        </b2mml:Value>
+      </b2mml:ProcessElementParameter>
+
+      <b2mml:ProcessElementParameter>
+        <b2mml:ID>Heating_Duration001</b2mml:ID>
+        <b2mml:Description>Max. duration of the process step heating</b2mml:Description>
+        <b2mml:Value>
+          <b2mml:ValueString>&lt;=300</b2mml:ValueString>
+          <b2mml:DataType>int</b2mml:DataType>
+          <b2mml:UnitOfMeasure>http://si-digital-framework.org/SI/units/second</b2mml:UnitOfMeasure>
+          <b2mml:Key>http://www.w3.org/2006/time#Duration</b2mml:Key>
+        </b2mml:Value>
+      </b2mml:ProcessElementParameter>
+
+      <b2mml:OtherInformation>
+        <b2mml:OtherInfoID>SemanticDescription</b2mml:OtherInfoID>
+        <b2mml:Description>URI referencing the Ontology Class definition</b2mml:Description>
+        <b2mml:OtherValue>
+          <b2mml:ValueString>http://www.iat.rwth-aachen.de/capability-ontology#HeatingOfLiquids</b2mml:ValueString>
+          <b2mml:DataType>uriReference</b2mml:DataType>
+          <b2mml:Key>Capability_with_Query.Heating_of_liquids</b2mml:Key>
+        </b2mml:OtherValue>
+      </b2mml:OtherInformation>
+    </b2mml:ProcessElement>
+
+    <!-- NEW: Dosing002 (reusing same capability and same parameter name as Dosing001) -->
+    <b2mml:ProcessElement>
+      <b2mml:ID>Dosing002</b2mml:ID>
+      <b2mml:Description>Dosing</b2mml:Description>
+      <b2mml:ProcessElementType>Process</b2mml:ProcessElementType>
+
+      <b2mml:Materials>
+        <b2mml:ID>Dosing002InputMaterials</b2mml:ID>
+        <b2mml:Description>Input Materials of ProcessDosing002</b2mml:Description>
+        <b2mml:MaterialsType>Input</b2mml:MaterialsType>
+      </b2mml:Materials>
+      <b2mml:Materials>
+        <b2mml:ID>Dosing002IntermediateMaterials</b2mml:ID>
+        <b2mml:Description>Intermediate Materials of ProcessDosing002</b2mml:Description>
+        <b2mml:MaterialsType>Intermediate</b2mml:MaterialsType>
+      </b2mml:Materials>
+      <b2mml:Materials>
+        <b2mml:ID>Dosing002OutputMaterials</b2mml:ID>
+        <b2mml:Description>Output Materials of ProcessDosing002</b2mml:Description>
+        <b2mml:MaterialsType>Output</b2mml:MaterialsType>
+      </b2mml:Materials>
+
+      <b2mml:ProcessElementParameter>
+        <b2mml:ID>Dosing_Amount001</b2mml:ID>
+        <b2mml:Description>Amount of Dosing</b2mml:Description>
+        <b2mml:Value>
+          <b2mml:ValueString>8.0</b2mml:ValueString>
+          <b2mml:DataType>double</b2mml:DataType>
+          <b2mml:UnitOfMeasure>http://si-digital-framework.org/SI/units/litre</b2mml:UnitOfMeasure>
+          <b2mml:Key>http://qudt.org/vocab/quantitykind/LiquidVolume</b2mml:Key>
+        </b2mml:Value>
+      </b2mml:ProcessElementParameter>
+
+      <b2mml:OtherInformation>
+        <b2mml:OtherInfoID>SemanticDescription</b2mml:OtherInfoID>
+        <b2mml:Description>URI referencing the Ontology Class definition</b2mml:Description>
+        <b2mml:OtherValue>
+          <b2mml:ValueString>http://css.iat.rwth-aachen.de/OntoProCap#Dosing</b2mml:ValueString>
+          <b2mml:DataType>uriReference</b2mml:DataType>
+          <b2mml:Key>Capability_with_Query.Dosing</b2mml:Key>
+        </b2mml:OtherValue>
+      </b2mml:OtherInformation>
+    </b2mml:ProcessElement>
+
+  </b2mml:ProcessProcedure>
+
+</b2mml:GRecipe>

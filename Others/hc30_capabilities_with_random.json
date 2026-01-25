@@ -1,0 +1,531 @@
+{
+  "resource: HC30_AAS": {
+    "capabilities": [
+      {
+        "capability": [
+          {
+            "capability_name": "HeatingControlled",
+            "capability_comment": "<VAR>",
+            "capability_ID": "http://css.iat.rwth-aachen.de/OntoProCap#HeatingControlled"
+          }
+        ],
+        "properties": [
+          {
+            "property_name": "SetTemperature",
+            "property_comment": "<VAR>",
+            "property_ID": "http://qudt.org/vocab/quantitykind/Temperature",
+            "property_unit": "http://si-digital-framework.org/SI/units/degreeCelsius",
+            "valueType": "xs:double",
+            "valueMin": "0",
+            "valueMax": "100",
+            "propertyRealizedBy": "c02489f4-4374-41b8-97a5-ac588815aac8",
+            "property_constraint": [],
+            "random_value_min": 6.72,
+            "random_value_max": 92.37
+          },
+          {
+            "property_name": "HoldingTime",
+            "property_comment": "<VAR>",
+            "property_ID": "http://www.w3.org/2006/time#Duration",
+            "property_unit": "http://si-digital-framework.org/SI/units/second",
+            "valueType": "xs:int",
+            "valueMin": "0",
+            "valueMax": "600",
+            "propertyRealizedBy": "5d28499a-55b3-4603-8b3a-08b5fac26edc",
+            "property_constraint": [],
+            "random_value_min": 32,
+            "random_value_max": 430
+          }
+        ],
+        "generalized_by": [
+          "HeatingOfLiquids"
+        ],
+        "realized_by": [
+          "9a3aebac-3ca7-40fa-847e-904f67353175"
+        ]
+      },
+      {
+        "capability": [
+          {
+            "capability_name": "HeatingPWM",
+            "capability_comment": "<VAR>",
+            "capability_ID": "http://css.iat.rwth-aachen.de/OntoProCap#HeatingPWM"
+          }
+        ],
+        "properties": [
+          {
+            "property_name": "SetTemperature",
+            "property_comment": "<VAR>",
+            "property_ID": "http://qudt.org/vocab/quantitykind/Temperature",
+            "property_unit": "http://si-digital-framework.org/SI/units/degreeCelsius",
+            "valueType": "xs:double",
+            "valueMin": "0",
+            "valueMax": "100",
+            "propertyRealizedBy": "c02489f4-4374-41b8-97a5-ac588815aac8",
+            "property_constraint": [],
+            "random_value_min": 5.9,
+            "random_value_max": 88.05
+          },
+          {
+            "property_name": "CycleTime",
+            "property_comment": "<VAR>",
+            "property_ID": "http://qudt.org/vocab/quantitykind/RotationalFrequency",
+            "property_unit": "http://qudt.org/vocab/unit/CYC-PER-SEC",
+            "valueType": "xs:int",
+            "valueMin": "0",
+            "valueMax": "64",
+            "propertyRealizedBy": "5db93ce2-87fd-4701-8cfc-ed12f9d15eaf",
+            "property_constraint": [],
+            "random_value_min": 30,
+            "random_value_max": 56
+          },
+          {
+            "property_name": "DutyCycle",
+            "property_comment": "<VAR>",
+            "property_ID": "http://qudt.org/vocab/quantitykind/DutyCycle",
+            "property_unit": "http://qudt.org/vocab/unit/PERCENT",
+            "valueType": "xs:int",
+            "valueMin": "24",
+            "valueMax": "78",
+            "propertyRealizedBy": "2ff86f2b-19a8-4f74-b524-2d4e183f0cf0",
+            "property_constraint": [],
+            "random_value_min": 50,
+            "random_value_max": 63
+          },
+          {
+            "property_name": "HoldingTime",
+            "property_comment": "<VAR>",
+            "property_ID": "http://www.w3.org/2006/time#Duration",
+            "property_unit": "http://si-digital-framework.org/SI/units/second",
+            "valueType": "xs:int",
+            "valueMin": "0",
+            "valueMax": "600",
+            "propertyRealizedBy": "5d28499a-55b3-4603-8b3a-08b5fac26edc",
+            "property_constraint": [],
+            "random_value_min": 48,
+            "random_value_max": 549
+          }
+        ],
+        "generalized_by": [
+          "HeatingOfLiquids"
+        ],
+        "realized_by": [
+          "a5ca6466-6b9f-4e0d-926f-e57dc87d57a7"
+        ]
+      },
+      {
+        "capability": [
+          {
+            "capability_name": "HeatingRamp",
+            "capability_comment": "<VAR>",
+            "capability_ID": "http://css.iat.rwth-aachen.de/OntoProCap#HeatingRamp"
+          }
+        ],
+        "properties": [
+          {
+            "property_name": "SetTemperature",
+            "property_comment": "<VAR>",
+            "property_ID": "http://qudt.org/vocab/quantitykind/Temperature",
+            "property_unit": "http://si-digital-framework.org/SI/units/degreeCelsius",
+            "valueType": "xs:double",
+            "valueMin": "0",
+            "valueMax": "100",
+            "propertyRealizedBy": "c02489f4-4374-41b8-97a5-ac588815aac8",
+            "property_constraint": [],
+            "random_value_min": 1.42,
+            "random_value_max": 91.79
+          },
+          {
+            "property_name": "HeatPower",
+            "property_comment": "<VAR>",
+            "property_ID": "",
+            "property_unit": "",
+            "valueType": "xs:int",
+            "valueMin": "0",
+            "valueMax": "100",
+            "propertyRealizedBy": "e13a5567-7258-40ba-9a6a-f4d7ed851fd6",
+            "property_constraint": [],
+            "range_type": "0-200_watt",
+            "random_value_min": 77,
+            "random_value_max": 197
+          },
+          {
+            "property_name": "HoldingTime",
+            "property_comment": "<VAR>",
+            "property_ID": "http://www.w3.org/2006/time#Duration",
+            "property_unit": "http://si-digital-framework.org/SI/units/second",
+            "valueType": "xs:int",
+            "valueMin": "0",
+            "valueMax": "600",
+            "propertyRealizedBy": "5d28499a-55b3-4603-8b3a-08b5fac26edc",
+            "property_constraint": [],
+            "random_value_min": 1,
+            "random_value_max": 528
+          }
+        ],
+        "generalized_by": [
+          "HeatingOfLiquids"
+        ],
+        "realized_by": [
+          "bfedd3ca-d81e-4123-8e8b-ad95779dcd19"
+        ]
+      },
+      {
+        "capability": [
+          {
+            "capability_name": "StirringContinuous",
+            "capability_comment": "<VAR>",
+            "capability_ID": "http://css.iat.rwth-aachen.de/OntoProCap#StirringContinuous"
+          }
+        ],
+        "properties": [
+          {
+            "property_name": "RevolutionsPerMinute",
+            "property_comment": "<VAR>",
+            "property_ID": "http://qudt.org/vocab/quantitykind/RotationalVelocity",
+            "property_unit": "http://qudt.org/vocab/unit/REV-PER-MIN",
+            "valueType": "xs:int",
+            "value0": "100",
+            "value1": "150",
+            "property_realized_by": "",
+            "original_value0": 100,
+            "original_value1": 150,
+            "random_value0": 108,
+            "random_value1": 148,
+            "value2": 58,
+            "random_value_min": 108,
+            "random_value_max": 148
+          }
+        ],
+        "generalized_by": [
+          "MixingOfLiquids",
+          "Stirring"
+        ],
+        "realized_by": [
+          "a1cd8636-78da-4923-8a45-774e2471a84e"
+        ]
+      },
+      {
+        "capability": [
+          {
+            "capability_name": "StirringDuration",
+            "capability_comment": "<VAR>",
+            "capability_ID": "http://css.iat.rwth-aachen.de/OntoProCap#StirringDuration"
+          }
+        ],
+        "properties": [
+          {
+            "property_name": "StirringTime",
+            "property_comment": "<VAR>",
+            "property_ID": "http://www.w3.org/2006/time#Duration",
+            "property_unit": "http://si-digital-framework.org/SI/units/second",
+            "valueType": "xs:int",
+            "valueMin": "0",
+            "valueMax": "",
+            "propertyRealizedBy": "c90a9289-6b7d-4409-91f4-3c7fda23549a",
+            "property_constraint": [],
+            "random_value_min": 1210,
+            "random_value_max": 2009
+          },
+          {
+            "property_name": "RevolutionsPerMinute",
+            "property_comment": "<VAR>",
+            "property_ID": "http://qudt.org/vocab/quantitykind/RotationalVelocity",
+            "property_unit": "http://qudt.org/vocab/unit/REV-PER-MIN",
+            "valueType": "xs:int",
+            "value0": "100",
+            "value1": "150",
+            "property_realized_by": "",
+            "original_value0": 100,
+            "original_value1": 150,
+            "random_value0": 110,
+            "random_value1": 125,
+            "value2": 5,
+            "random_value_min": 110,
+            "random_value_max": 125
+          }
+        ],
+        "generalized_by": [
+          "MixingOfLiquids",
+          "Stirring"
+        ],
+        "realized_by": [
+          "dedc4be7-2550-44a2-9d85-c9fbc83dd0dc"
+        ]
+      },
+      {
+        "capability": [
+          {
+            "capability_name": "StirringPulseContinuous",
+            "capability_comment": "<VAR>",
+            "capability_ID": "http://css.iat.rwth-aachen.de/OntoProCap#StirringPulseContinuous"
+          }
+        ],
+        "properties": [
+          {
+            "property_name": "PulseTimeHigh",
+            "property_comment": "<VAR>",
+            "property_ID": "http://www.w3.org/2006/time#Duration",
+            "property_unit": "http://si-digital-framework.org/SI/units/second",
+            "valueType": "xs:int",
+            "valueMin": "1",
+            "valueMax": "",
+            "propertyRealizedBy": "ccb482c9-f271-44ed-9e21-179bf2b3f9f3",
+            "property_constraint": [],
+            "random_value_min": 53,
+            "random_value_max": 3130
+          },
+          {
+            "property_name": "PulseTimeLow",
+            "property_comment": "<VAR>",
+            "property_ID": "http://www.w3.org/2006/time#Duration",
+            "property_unit": "http://si-digital-framework.org/SI/units/second",
+            "valueType": "xs:int",
+            "valueMin": "1",
+            "valueMax": "",
+            "propertyRealizedBy": "fc61d0fb-dd96-4db8-b011-fe0f0cd95219",
+            "property_constraint": [],
+            "random_value_min": 1109,
+            "random_value_max": 1818
+          },
+          {
+            "property_name": "RevolutionsPerMinute",
+            "property_comment": "<VAR>",
+            "property_ID": "http://qudt.org/vocab/quantitykind/RotationalVelocity",
+            "property_unit": "http://qudt.org/vocab/unit/REV-PER-MIN",
+            "valueType": "xs:int",
+            "value0": "100",
+            "value1": "150",
+            "property_realized_by": "",
+            "original_value0": 100,
+            "original_value1": 150,
+            "random_value0": 112,
+            "random_value1": 146,
+            "value2": 55,
+            "random_value_min": 112,
+            "random_value_max": 146
+          }
+        ],
+        "generalized_by": [
+          "MixingOfLiquids",
+          "Stirring"
+        ],
+        "realized_by": [
+          "84bef57b-f902-4fe9-81f6-7cd350a1800c"
+        ]
+      },
+      {
+        "capability": [
+          {
+            "capability_name": "StirringPulseDuration",
+            "capability_comment": "<VAR>",
+            "capability_ID": "http://css.iat.rwth-aachen.de/OntoProCap#StirringPulseDuration"
+          }
+        ],
+        "properties": [
+          {
+            "property_name": "StirringTime",
+            "property_comment": "<VAR>",
+            "property_ID": "http://www.w3.org/2006/time#Duration",
+            "property_unit": "http://si-digital-framework.org/SI/units/second",
+            "valueType": "xs:int",
+            "valueMin": "0",
+            "valueMax": "",
+            "propertyRealizedBy": "c90a9289-6b7d-4409-91f4-3c7fda23549a",
+            "property_constraint": [],
+            "random_value_min": 864,
+            "random_value_max": 3286
+          },
+          {
+            "property_name": "PulseTimeHigh",
+            "property_comment": "<VAR>",
+            "property_ID": "http://www.w3.org/2006/time#Duration",
+            "property_unit": "http://si-digital-framework.org/SI/units/second",
+            "valueType": "xs:int",
+            "valueMin": "1",
+            "valueMax": "",
+            "propertyRealizedBy": "ccb482c9-f271-44ed-9e21-179bf2b3f9f3",
+            "property_constraint": [],
+            "random_value_min": 60,
+            "random_value_max": 2880
+          },
+          {
+            "property_name": "PulseTimeLow",
+            "property_comment": "<VAR>",
+            "property_ID": "http://www.w3.org/2006/time#Duration",
+            "property_unit": "http://si-digital-framework.org/SI/units/second",
+            "valueType": "xs:int",
+            "valueMin": "1",
+            "valueMax": "",
+            "propertyRealizedBy": "fc61d0fb-dd96-4db8-b011-fe0f0cd95219",
+            "property_constraint": [],
+            "random_value_min": 455,
+            "random_value_max": 3364
+          },
+          {
+            "property_name": "RevolutionsPerMinute",
+            "property_comment": "<VAR>",
+            "property_ID": "http://qudt.org/vocab/quantitykind/RotationalVelocity",
+            "property_unit": "http://qudt.org/vocab/unit/REV-PER-MIN",
+            "valueType": "xs:int",
+            "value0": "100",
+            "value1": "150",
+            "property_realized_by": "",
+            "original_value0": 100,
+            "original_value1": 150,
+            "random_value0": 114,
+            "random_value1": 140,
+            "value2": 141,
+            "random_value_min": 114,
+            "random_value_max": 140
+          }
+        ],
+        "generalized_by": [
+          "MixingOfLiquids",
+          "Stirring"
+        ],
+        "realized_by": [
+          "e481bb0c-d36e-4a47-a67a-897c9545bdef"
+        ]
+      },
+      {
+        "capability": [
+          {
+            "capability_name": "Dosing",
+            "capability_comment": "<VAR>",
+            "capability_ID": "http://css.iat.rwth-aachen.de/OntoProCap#Dosing"
+          }
+        ],
+        "properties": [
+          {
+            "property_name": "Litre",
+            "property_comment": "<VAR>",
+            "property_ID": "http://qudt.org/vocab/quantitykind/LiquidVolume",
+            "property_unit": "http://si-digital-framework.org/SI/units/litre",
+            "valueType": "xs:double",
+            "valueMin": "0",
+            "valueMax": "",
+            "propertyRealizedBy": "b6f83043-8689-499f-ba15-0a1eb64a2d82",
+            "property_constraint": [],
+            "random_value_min": 2.33,
+            "random_value_max": 12.31,
+            "starts_from_zero": true
+          },
+          {
+            "property_name": "Volume",
+            "property_comment": "<VAR>",
+            "property_ID": "http://qudt.org/vocab/quantitykind/LiquidVolume",
+            "property_unit": "http://si-digital-framework.org/SI/units/litre",
+            "valueType": "xs:double",
+            "valueMin": "0.0",
+            "valueMax": "15",
+            "propertyRealizedBy": "",
+            "property_constraint": [
+              {
+                "conditional_type": "Pre",
+                "constraint_type": "Basic",
+                "property_constraint_ID": "http://qudt.org/vocab/quantitykind/LiquidVolume",
+                "property_constraint_unit": "http://si-digital-framework.org/SI/units/litre",
+                "property_constraint_value": ">=1.0"
+              }
+            ],
+            "random_value_min": 2.97,
+            "random_value_max": 14.6,
+            "starts_from_zero": false
+          }
+        ],
+        "generalized_by": [],
+        "realized_by": [
+          "6bcc3cbd-bad8-4cf1-b613-1fada97016a4"
+        ]
+      },
+      {
+        "capability": [
+          {
+            "capability_name": "Stirring",
+            "capability_comment": "<VAR>",
+            "capability_ID": "http://css.iat.rwth-aachen.de/OntoProCap#Stirring"
+          }
+        ],
+        "properties": [],
+        "generalized_by": [],
+        "realized_by": []
+      },
+      {
+        "capability": [
+          {
+            "capability_name": "Storing",
+            "capability_comment": "<VAR>",
+            "capability_ID": "http://css.iat.rwth-aachen.de/OntoProCap#Storing"
+          }
+        ],
+        "properties": [
+          {
+            "property_name": "Volume",
+            "property_comment": "<VAR>",
+            "property_ID": "http://qudt.org/vocab/quantitykind/LiquidVolume",
+            "property_unit": "http://si-digital-framework.org/SI/units/litre",
+            "valueType": "xs:double",
+            "valueMin": "0.0",
+            "valueMax": "15",
+            "propertyRealizedBy": "",
+            "property_constraint": [],
+            "random_value_min": 2.9,
+            "random_value_max": 10.21,
+            "starts_from_zero": true
+          }
+        ],
+        "generalized_by": [],
+        "realized_by": []
+      },
+      {
+        "capability": [
+          {
+            "capability_name": "MixingOfLiquids",
+            "capability_comment": "<VAR>",
+            "capability_ID": "http://css.iat.rwth-aachen.de/OntoProCap#MixingOfLiquids"
+          }
+        ],
+        "properties": [],
+        "generalized_by": [],
+        "realized_by": []
+      },
+      {
+        "capability": [
+          {
+            "capability_name": "HeatingOfLiquids",
+            "capability_comment": "<VAR>",
+            "capability_ID": "http://css.iat.rwth-aachen.de/OntoProCap#HeatingOfLiquids"
+          }
+        ],
+        "properties": [],
+        "generalized_by": [],
+        "realized_by": []
+      }
+    ],
+    "optimization_costs": {
+      "energy_cost": {
+        "property_name": "EnergyCost",
+        "property_ID": "",
+        "property_unit": "EUR/kWh",
+        "original_value": 1.0,
+        "random_value": 1.338
+      },
+      "use_cost": {
+        "property_name": "UseCost",
+        "property_ID": "",
+        "property_unit": "EUR",
+        "original_value": 50.0,
+        "random_value": 52.26
+      },
+      "co2_footprint": {
+        "property_name": "CO2Footprint",
+        "property_ID": "",
+        "property_unit": "g CO2",
+        "original_value": 100.0,
+        "random_value": 117.1
+      }
+    },
+    "random_seed_used": 1
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "optimization_date": "2024-01-01",
+  "weights_used": {
+    "EnergyCost": 0.4,
+    "UseCost": 0.3,
+    "CO2Footprint": 0.3
+  },
+  "total_solutions_evaluated": 12,
+  "resource_costs_available": [
+    "2025-04_HC10",
+    "2025-04_HC11",
+    "2025-04_HC12",
+    "2025-04_HC13",
+    "2025-04_HC14",
+    "2025-04_HC15",
+    "2025-04_HC16",
+    "2025-04_HC17",
+    "2025-04_HC18",
+    "2025-04_HC19",
+    "2025-04_HC20",
+    "2025-04_HC21",
+    "2025-04_HC22",
+    "2025-04_HC23",
+    "2025-04_HC24",
+    "2025-04_HC25",
+    "2025-04_HC26",
+    "2025-04_HC27",
+    "2025-04_HC28",
+    "2025-04_HC29",
+    "2025-04_HC30",
+    "2025-04_HC31",
+    "2025-04_HC32",
+    "2025-04_HC33",
+    "2025-04_HC34",
+    "2025-04_HC35",
+    "2025-04_HC36",
+    "2025-04_HC37",
+    "2025-04_HC38",
+    "2025-04_HC39"
+  ],
+  "results": [
+    {
+      "solution_id": 4,
+      "total_energy_cost": 3.0,
+      "total_use_cost": 175.0,
+      "total_co2_footprint": 280.0,
+      "composite_score": 137.7,
+      "resource_usage": {
+        "2025-04_HC29": 2,
+        "2025-04_HC19": 1
+      },
+      "material_flow_consistent": true,
+      "weighted_breakdown": {
+        "energy": 1.2000000000000002,
+        "use": 52.5,
+        "co2": 84.0
+      }
+    },
+    {
+      "solution_id": 1,
+      "total_energy_cost": 3.0,
+      "total_use_cost": 180.0,
+      "total_co2_footprint": 280.0,
+      "composite_score": 139.2,
+      "resource_usage": {
+        "2025-04_HC29": 2,
+        "2025-04_HC12": 1
+      },
+      "material_flow_consistent": true,
+      "weighted_breakdown": {
+        "energy": 1.2000000000000002,
+        "use": 54.0,
+        "co2": 84.0
+      }
+    },
+    {
+      "solution_id": 6,
+      "total_energy_cost": 3.0,
+      "total_use_cost": 173.0,
+      "total_co2_footprint": 300.0,
+      "composite_score": 143.1,
+      "resource_usage": {
+        "2025-04_HC29": 2,
+        "2025-04_HC18": 1
+      },
+      "material_flow_consistent": true,
+      "weighted_breakdown": {
+        "energy": 1.2000000000000002,
+        "use": 51.9,
+        "co2": 90.0
+      }
+    },
+    {
+      "solution_id": 3,
+      "total_energy_cost": 3.0,
+      "total_use_cost": 180.0,
+      "total_co2_footprint": 300.0,
+      "composite_score": 145.2,
+      "resource_usage": {
+        "2025-04_HC29": 2,
+        "2025-04_HC15": 1
+      },
+      "material_flow_consistent": true,
+      "weighted_breakdown": {
+        "energy": 1.2000000000000002,
+        "use": 54.0,
+        "co2": 90.0
+      }
+    },
+    {
+      "solution_id": 5,
+      "total_energy_cost": 3.0,
+      "total_use_cost": 180.0,
+      "total_co2_footprint": 300.0,
+      "composite_score": 145.2,
+      "resource_usage": {
+        "2025-04_HC29": 2,
+        "2025-04_HC10": 1
+      },
+      "material_flow_consistent": true,
+      "weighted_breakdown": {
+        "energy": 1.2000000000000002,
+        "use": 54.0,
+        "co2": 90.0
+      }
+    },
+    {
+      "solution_id": 9,
+      "total_energy_cost": 3.0,
+      "total_use_cost": 205.0,
+      "total_co2_footprint": 280.0,
+      "composite_score": 146.7,
+      "resource_usage": {
+        "2025-04_HC20": 2,
+        "2025-04_HC19": 1
+      },
+      "material_flow_consistent": true,
+      "weighted_breakdown": {
+        "energy": 1.2000000000000002,
+        "use": 61.5,
+        "co2": 84.0
+      }
+    },
+    {
+      "solution_id": 8,
+      "total_energy_cost": 3.0,
+      "total_use_cost": 210.0,
+      "total_co2_footprint": 280.0,
+      "composite_score": 148.2,
+      "resource_usage": {
+        "2025-04_HC20": 2,
+        "2025-04_HC12": 1
+      },
+      "material_flow_consistent": true,
+      "weighted_breakdown": {
+        "energy": 1.2000000000000002,
+        "use": 63.0,
+        "co2": 84.0
+      }
+    },
+    {
+      "solution_id": 2,
+      "total_energy_cost": 3.0,
+      "total_use_cost": 200.0,
+      "total_co2_footprint": 300.0,
+      "composite_score": 151.2,
+      "resource_usage": {
+        "2025-04_HC29": 2,
+        "2025-04_HC13": 1
+      },
+      "material_flow_consistent": true,
+      "weighted_breakdown": {
+        "energy": 1.2000000000000002,
+        "use": 60.0,
+        "co2": 90.0
+      }
+    },
+    {
+      "solution_id": 10,
+      "total_energy_cost": 3.0,
+      "total_use_cost": 203.0,
+      "total_co2_footprint": 300.0,
+      "composite_score": 152.1,
+      "resource_usage": {
+        "2025-04_HC20": 2,
+        "2025-04_HC18": 1
+      },
+      "material_flow_consistent": true,
+      "weighted_breakdown": {
+        "energy": 1.2000000000000002,
+        "use": 60.9,
+        "co2": 90.0
+      }
+    },
+    {
+      "solution_id": 7,
+      "total_energy_cost": 3.0,
+      "total_use_cost": 210.0,
+      "total_co2_footprint": 300.0,
+      "composite_score": 154.2,
+      "resource_usage": {
+        "2025-04_HC20": 2,
+        "2025-04_HC10": 1
+      },
+      "material_flow_consistent": true,
+      "weighted_breakdown": {
+        "energy": 1.2000000000000002,
+        "use": 63.0,
+        "co2": 90.0
+      }
+    },
+    {
+      "solution_id": 11,
+      "total_energy_cost": 3.0,
+      "total_use_cost": 210.0,
+      "total_co2_footprint": 300.0,
+      "composite_score": 154.2,
+      "resource_usage": {
+        "2025-04_HC20": 2,
+        "2025-04_HC15": 1
+      },
+      "material_flow_consistent": true,
+      "weighted_breakdown": {
+        "energy": 1.2000000000000002,
+        "use": 63.0,
+        "co2": 90.0
+      }
+    },
+    {
+      "solution_id": 12,
+      "total_energy_cost": 3.0,
+      "total_use_cost": 230.0,
+      "total_co2_footprint": 300.0,
+      "composite_score": 160.2,
+      "resource_usage": {
+        "2025-04_HC20": 2,
+        "2025-04_HC13": 1
+      },
+      "material_flow_consistent": true,
+      "weighted_breakdown": {
+        "energy": 1.2000000000000002,
+        "use": 69.0,
+        "co2": 90.0
+      }
+    }
+  ],
+  "optimal_solution": {
+    "solution_id": 4,
+    "total_energy_cost": 3.0,
+    "total_use_cost": 175.0,
+    "total_co2_footprint": 280.0,
+    "composite_score": 137.7,
+    "resource_usage": {
+      "2025-04_HC29": 2,
+      "2025-04_HC19": 1
+    },
+    "material_flow_consistent": true,
+    "weighted_breakdown": {
+      "energy": 1.2000000000000002,
+      "use": 52.5,
+      "co2": 84.0
+    }
+  }
+}

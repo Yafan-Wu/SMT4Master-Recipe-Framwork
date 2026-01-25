@@ -1,0 +1,150 @@
+{
+    "ID": "GeneralRecipe001",
+    "Description": "General Recipe of a mixing and heating proces",
+    "Inputs": [
+        {
+            "ID": "Educt001",
+            "Description": "Water",
+            "Quantity": "5.0",
+            "DataType": "double",
+            "UnitOfMeasure": "http://si-digital-framework.org/SI/units/litre",
+            "Key": "http://qudt.org/vocab/quantitykind/LiquidVolume"
+        },
+        {
+            "ID": "Educt002",
+            "Description": "Water",
+            "Quantity": "3.0",
+            "DataType": "double",
+            "UnitOfMeasure": "http://si-digital-framework.org/SI/units/litre",
+            "Key": "http://qudt.org/vocab/quantitykind/LiquidVolume"
+        }
+    ],
+    "Outputs": [
+        {
+            "ID": "Product001",
+            "Description": "Mixed and heated water",
+            "Quantity": "8.0",
+            "DataType": "double",
+            "UnitOfMeasure": "http://si-digital-framework.org/SI/units/litre",
+            "Key": "http://qudt.org/vocab/quantitykind/LiquidVolume"
+        }
+    ],
+    "Intermediates": [
+        {
+            "ID": "Intermediate001",
+            "Description": "Mixed water",
+            "Quantity": "8.0",
+            "DataType": "double",
+            "UnitOfMeasure": "http://si-digital-framework.org/SI/units/litre",
+            "Key": "http://qudt.org/vocab/quantitykind/LiquidVolume"
+        },
+        {
+            "ID": "Intermediate002",
+            "Description": "Dosed Water for heating",
+            "Quantity": "8.0",
+            "DataType": "double",
+            "UnitOfMeasure": "http://si-digital-framework.org/SI/units/litre",
+            "Key": "http://qudt.org/vocab/quantitykind/LiquidVolume"
+        }
+    ],
+    "ProcessElements": [
+        {
+            "ID": "Mixing_of_Liquids001",
+            "Description": "Mixing_of_Liquids",
+            "Parameters": [
+                {
+                    "ID": "Revolutions_per_minute001",
+                    "Description": "Revolutions per minute",
+                    "ValueString": "200",
+                    "DataType": "int",
+                    "UnitOfMeasure": "http://qudt.org/vocab/unit/REV-PER-MIN",
+                    "Key": "http://qudt.org/vocab/quantitykind/RotationalVelocity"
+                },
+                {
+                    "ID": "Mixing_Duration001",
+                    "Description": "Duration of the process step mixing",
+                    "ValueString": "15",
+                    "DataType": "int",
+                    "UnitOfMeasure": "http://si-digital-framework.org/SI/units/second",
+                    "Key": "http://www.w3.org/2006/time#Duration"
+                }
+            ],
+            "SemanticDescription": "http://css.iat.rwth-aachen.de/OntoProCap#MixingOfLiquids"
+        },
+        {
+            "ID": "Dosing001",
+            "Description": "Dosing",
+            "Parameters": [
+                {
+                    "ID": "Dosing_Amount001",
+                    "Description": "Amount of Dosing",
+                    "ValueString": "8.0",
+                    "DataType": "double",
+                    "UnitOfMeasure": "http://si-digital-framework.org/SI/units/litre",
+                    "Key": "http://qudt.org/vocab/quantitykind/LiquidVolume"
+                }
+            ],
+            "SemanticDescription": "http://css.iat.rwth-aachen.de/OntoProCap#Dosing"
+        },
+        {
+            "ID": "Heating_of_liquids001",
+            "Description": "Heating_of_liquids",
+            "Parameters": [
+                {
+                    "ID": "Temperature_Heating001",
+                    "Description": "Set heating temperature to reach materials temperature",
+                    "ValueString": ">=27.0",
+                    "DataType": "double",
+                    "UnitOfMeasure": "http://si-digital-framework.org/SI/units/degreeCelsius",
+                    "Key": "http://qudt.org/vocab/quantitykind/Temperature"
+                },
+                {
+                    "ID": "Heating_Duration001",
+                    "Description": "Max. duration of the process step heating",
+                    "ValueString": "<=300",
+                    "DataType": "int",
+                    "UnitOfMeasure": "http://si-digital-framework.org/SI/units/second",
+                    "Key": "http://www.w3.org/2006/time#Duration"
+                }
+            ],
+            "SemanticDescription": "http://css.iat.rwth-aachen.de/OntoProCap#HeatingOfLiquids"
+        }
+    ],
+    "DirectedLinks": [
+        {
+            "ID": "0",
+            "FromID": "Educt001",
+            "ToID": "Mixing_of_Liquids001"
+        },
+        {
+            "ID": "1",
+            "FromID": "Educt002",
+            "ToID": "Mixing_of_Liquids001"
+        },
+        {
+            "ID": "2",
+            "FromID": "Mixing_of_Liquids001",
+            "ToID": "Intermediate001"
+        },
+        {
+            "ID": "3",
+            "FromID": "Intermediate001",
+            "ToID": "Dosing001"
+        },
+        {
+            "ID": "4",
+            "FromID": "Dosing001",
+            "ToID": "Intermediate002"
+        },
+        {
+            "ID": "5",
+            "FromID": "Intermediate002",
+            "ToID": "Heating_of_liquids001"
+        },
+        {
+            "ID": "6",
+            "FromID": "Heating_of_liquids001",
+            "ToID": "Product001"
+        }
+    ]
+}
