@@ -1,0 +1,5 @@
+Python>=3.10
+PyQt6==6.9.1
+lxml
+qfluentwidgets
+z3-solver

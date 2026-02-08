@@ -5,9 +5,6 @@ import os
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
-# Unit mapping (MTP -> SI/QUDT IRIs -> label)
-from .mtp_unit_mapping import map_unit as map_unit_from_table
-
 # Namespace constants
 B2MML_NS = "http://www.mesa.org/xml/B2MML"
 XSI_NS = "http://www.w3.org/2001/XMLSchema-instance"
@@ -154,9 +151,21 @@ def generate_b2mml_master_recipe(
             "duration": "duration",
         }
         return mapping.get(json_type, json_type)
-    # Map units (via external mapping table)
+
+    # Map units
     def map_unit(unit_uri):
-        return map_unit_from_table(unit_uri)
+        mapping = {
+            "http://si-digital-framework.org/SI/units/second": "Sekunde",
+            "http://si-digital-framework.org/SI/units/litre": "Liter",
+            "http://si-digital-framework.org/SI/units/degreeCelsius": "Grad Celsius",
+            "http://qudt.org/vocab/unit/REV-PER-MIN": "Umdrehungen pro Minute",
+            "http://qudt.org/vocab/unit/PERCENT": "Prozent",
+            "http://qudt.org/vocab/unit/CYC-PER-SEC": "CYC-PER-SEC",
+        }
+        if unit_uri in mapping:
+            return mapping[unit_uri]
+        return unit_uri.split("/")[-1] if "/" in unit_uri else unit_uri
+
     # Store parameter mapping - global parameter counter
     param_mapping = {}
     global_param_counter = 1

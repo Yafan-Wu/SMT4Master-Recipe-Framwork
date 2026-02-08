@@ -40,7 +40,7 @@ class HomePage(QWidget):
         layout.setContentsMargins(30, 30, 30, 30)
         layout.setSpacing(20)
 
-        title = TitleLabel("SMT4ModPlant Orchestrator", self)
+        title = TitleLabel("SMT4Master Recipe Framwork", self)
         desc = CaptionLabel("Resource matching tool based on General Recipe and AAS Capabilities.", self)
         desc.setStyleSheet("color: #666;") 
         layout.addWidget(title)

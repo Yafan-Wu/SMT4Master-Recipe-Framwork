@@ -37,7 +37,7 @@ except ImportError as e:
 class MainWindow(FluentWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("SMT4ModPlant GUI Orchestrator")
+        self.setWindowTitle("SMT4Master Recipe Framwork")
         setTheme(Theme.DARK)
         self.resize(1100, 750)
         
