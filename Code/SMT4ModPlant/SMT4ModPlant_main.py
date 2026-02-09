@@ -1,9 +1,10 @@
 # Code/SMT4ModPlant/SMT4ModPlant_main.py
 import json
-from z3 import Solver, Bool, Not, Sum, If, is_true, sat, And
+from z3 import Solver, Bool, Not, Sum, If, is_true, sat, And, Int, Or
 
 # Global constants
-TRANSPORT_CAPABILITIES = ["Dosing", "Transfer", "Discharge"]
+TRANSPORT_CAPABILITIES = ["Transfer", "Discharge"]
+DOSING_CAPABILITY = "Dosing"
 
 # ---------------------------------------------------------
 # HELPER FUNCTIONS (Condensed for brevity, logic unchanged)
@@ -440,6 +441,136 @@ def _add_exactly_one_resource_per_step_constraints(solver, Assignment):
             solver.add(False)
 
 
+
+def _add_material_flow_constraints(solver, recipe_data, process_steps, resources, Assignment, step_resource_to_caps_props):
+    """
+    Encode the material-flow consistency rules directly as SMT constraints (no post-filtering).
+
+    We model a *static* location for each material ID:
+      - loc[m] in {-1, 0..len(resources)-1}
+      - -1 means "mobile / can be consumed anywhere" (e.g., after a transport step)
+
+    Rules encoded (mirrors your original intent, but inside SMT):
+      1) For each (step -> material) link:
+         - If producing step is Transfer/Discharge => loc[out] = -1; if producing step is Dosing => loc[out] = -1 (so the *next* step may move across equipment); else loc[out] = assigned_resource_index
+         - Else => loc[out] = assigned_resource_index
+
+      2) For each (material -> step) link:
+         - If consuming step is Transfer/Discharge => no location constraint; if consuming step is Dosing => must be on same resource as the material (i.e., in-vessel dosing); else same as before (or mobile)
+         - Else => consumer must be on the same resource as loc[in], unless loc[in] = -1 (mobile)
+
+    Inputs are treated as mobile by default: loc[input] = -1
+    """
+    n_res = len(resources)
+
+    # Collect all material IDs we care about (anything referenced by a DirectedLink, plus inputs/intermediates/outputs)
+    mat_ids = set()
+    for link in recipe_data.get('DirectedLinks', []):
+        mat_ids.add(link.get('FromID'))
+        mat_ids.add(link.get('ToID'))
+
+    for k in ('Inputs', 'Intermediates', 'Outputs'):
+        for m in recipe_data.get(k, []) or []:
+            mid = m.get('ID')
+            if mid:
+                mat_ids.add(mid)
+
+    # step lookup
+    step_by_id = {step['ID']: idx for idx, step in enumerate(process_steps)}
+
+    # Create location variables
+    loc = {mid: Int(f"loc_{mid}") for mid in mat_ids}
+
+    # Domain: -1 (mobile) or [0..n_res-1]
+    for mid, v in loc.items():
+        solver.add(Or(v == -1, And(v >= 0, v < n_res)))
+
+    # Inputs are mobile by default
+    for inp in recipe_data.get('Inputs', []) or []:
+        mid = inp.get('ID')
+        if mid in loc:
+            solver.add(loc[mid] == -1)
+
+    # Precompute which (step, resource) assignment is a "transport step" under your capability matching result
+    is_transport_pair = [[False for _ in resources] for _ in process_steps]
+    for i in range(len(process_steps)):
+        for j in range(len(resources)):
+            if Assignment[i][j] is None:
+                continue
+            caps_props = step_resource_to_caps_props[i][j]
+            if not caps_props:
+                continue
+            caps, _ = caps_props
+            is_transport_pair[i][j] = any(c in TRANSPORT_CAPABILITIES for c in caps)
+
+    # Precompute which (step, resource) assignment is a Dosing step under your capability matching result
+    is_dosing_pair = [[False for _ in resources] for _ in process_steps]
+    for i in range(len(process_steps)):
+        for j in range(len(resources)):
+            if Assignment[i][j] is None:
+                continue
+            caps_props = step_resource_to_caps_props[i][j]
+            if not caps_props:
+                continue
+            caps, _ = caps_props
+            is_dosing_pair[i][j] = ("Dosing" in caps)
+
+    # Encode constraints per DirectedLink
+    for link in recipe_data.get('DirectedLinks', []) or []:
+        from_id = link.get('FromID')
+        to_id = link.get('ToID')
+
+        # (step -> material): producing link
+        if from_id in step_by_id and to_id in loc:
+            si = step_by_id[from_id]
+            for j in range(n_res):
+                a = Assignment[si][j]
+                if a is None:
+                    continue
+                solver.add(
+                    If(
+                        a,
+                        loc[to_id] == (-1 if (is_transport_pair[si][j] or is_dosing_pair[si][j]) else j),
+                        True
+                    )
+                )
+            continue
+
+        # (material -> step): consuming link
+        if from_id in loc and to_id in step_by_id:
+            si = step_by_id[to_id]
+            for j in range(n_res):
+                a = Assignment[si][j]
+                if a is None:
+                    continue
+                if is_transport_pair[si][j]:
+                    # Transfer/Discharge: can consume from anywhere (models moving material)
+                    solver.add(If(a, True, True))
+                elif is_dosing_pair[si][j]:
+                    # Dosing: must consume on the same equipment as the material (in-vessel dosing)
+                    # (i.e., loc[in] cannot be mobile here)
+                    solver.add(
+                        If(
+                            a,
+                            loc[from_id] == j,
+                            True
+                        )
+                    )
+                else:
+                    # Other consumers: must be co-located with the material unless the material is mobile (-1)
+                    solver.add(
+                        If(
+                            a,
+                            Or(loc[from_id] == -1, loc[from_id] == j),
+                            True
+                        )
+                    )
+            continue
+
+    # return loc for debugging if desired
+    return loc
+
+
 def _block_current_solution(solver, Assignment, model):
     """
     Block the current solution so the next SAT call finds a different assignment.
@@ -518,6 +649,9 @@ def run_optimization(recipe_data, capabilities_data, log_callback=print, generat
     # 2) Add core "exactly one resource per step" constraints.
     _add_exactly_one_resource_per_step_constraints(solver, Assignment)
 
+    # 2b) Add material-flow consistency constraints directly into SMT.
+    _add_material_flow_constraints(solver, recipe_data, process_steps, resources, Assignment, step_resource_to_caps_props)
+
     log_callback("Solving constraints...")
 
     attempt_count = 0
@@ -531,33 +665,32 @@ def run_optimization(recipe_data, capabilities_data, log_callback=print, generat
     while solver.check() == sat:
         model = solver.model()
         attempt_count += 1
+        if attempt_count % 200 == 0:
+            log_callback(f"Still searching... SAT models tried: {attempt_count}, valid: {valid_solution_count}"
+        )
+        # Every SAT model is now guaranteed material-flow consistent by SMT constraints.
+        valid_solution_count += 1
+        log_callback(f"Solution {valid_solution_count} Found (Attempt {attempt_count})!")
 
-        # Additional semantic/material-flow filter (outside SMT constraints).
-        if is_materialflow_consistent(
-            model, step_resource_to_caps_props, process_steps, resources, recipe_data, Assignment
-        ):
-            valid_solution_count += 1
-            log_callback(f"Solution {valid_solution_count} Found (Attempt {attempt_count})!")
-
-            if generate_json:
-                solution_json = solution_to_json(
-                    model, process_steps, resources, step_resource_to_caps_props,
-                    Assignment, recipe_data, capabilities_data, valid_solution_count
-                )
-                all_json_solutions.append(solution_json)
-
-            _append_solution_results_for_gui(
-                all_results_for_gui=all_results_for_gui,
-                solution_id=valid_solution_count,
-                process_steps=process_steps,
-                resources=resources,
-                Assignment=Assignment,
-                model=model,
-                step_resource_to_caps_props=step_resource_to_caps_props,
+        if generate_json:
+            solution_json = solution_to_json(
+                model, process_steps, resources, step_resource_to_caps_props,
+                Assignment, recipe_data, capabilities_data, valid_solution_count
             )
+            all_json_solutions.append(solution_json)
 
-            if not find_all_solutions:
-                break
+        _append_solution_results_for_gui(
+            all_results_for_gui=all_results_for_gui,
+            solution_id=valid_solution_count,
+            process_steps=process_steps,
+            resources=resources,
+            Assignment=Assignment,
+            model=model,
+            step_resource_to_caps_props=step_resource_to_caps_props,
+        )
+
+        if not find_all_solutions:
+            break
 
         # Block current assignment and continue searching.
         _block_current_solution(solver, Assignment, model)
