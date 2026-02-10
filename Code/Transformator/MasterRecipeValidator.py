@@ -3,61 +3,59 @@ import re
 from pathlib import Path
 from lxml import etree
 
-# =========================
-# XML / XSD Validation
-# =========================
+# ==========================================================
+# XSD picking + XML validation (keeps old public API)
+# ==========================================================
 
 def _guess_root_xsd(allschema_dir: str) -> str:
     p = Path(allschema_dir)
-    xsds = sorted([x for x in p.rglob('*.xsd') if x.is_file()])
-    if not xsds:
-        raise FileNotFoundError(f"No .xsd files found under: {allschema_dir}")
-    if len(xsds) == 1:
+    xsds = sorted([x for x in p.rglob("*.xsd") if x.is_file()])
+    # prefer masterrecipe.xsd if present
+    for x in xsds:
+        if "masterrecipe" in x.name.lower():
+            return str(x)
+    if xsds:
+        xsds.sort(key=lambda x: x.stat().st_size, reverse=True)
         return str(xsds[0])
-
-    def score(x: Path):
-        name = x.name.lower()
-        kw = 0
-        for k in ("master", "recipe", "b2mml"):
-            if k in name:
-                kw += 10
-        depth = len(x.relative_to(p).parts)
-        size = x.stat().st_size
-        return (kw, -depth, size)
-
-    return str(sorted(xsds, key=score, reverse=True)[0])
+    return ""
 
 
-def validate_master_recipe_xml(master_recipe_xml_path: str,
-                               allschema_dir: str,
-                               root_xsd_path: str | None = None):
-    xml_path = Path(master_recipe_xml_path)
-    if not xml_path.exists():
-        raise FileNotFoundError(xml_path)
+def validate_master_recipe_xml(
+    master_recipe_xml_path: str,
+    allschema_dir: str,
+    root_xsd_path: str | None = None
+) -> tuple[bool, list[str], str | None]:
+    """
+    BACKWARD-COMPAT API expected by Results.py / Workers.py
 
+    Returns: (ok, errors, used_root_xsd_path)
+    """
     used_root = root_xsd_path or _guess_root_xsd(allschema_dir)
-    parser = etree.XMLParser(remove_blank_text=True, recover=False, huge_tree=True)
+    if not used_root:
+        return False, [f"[XSD] No .xsd found under: {allschema_dir}"], None
 
-    xml_doc = etree.parse(str(xml_path), parser)
-    xsd_doc = etree.parse(str(used_root), parser)
+    try:
+        xml_doc = etree.parse(str(master_recipe_xml_path))
+    except Exception as e:
+        return False, [f"[XML] Failed to parse XML: {e}"], used_root
 
-    schema = etree.XMLSchema(xsd_doc)
+    try:
+        xsd_doc = etree.parse(str(used_root))
+        schema = etree.XMLSchema(xsd_doc)
+    except Exception as e:
+        return False, [f"[XSD] Failed to parse XSD ({used_root}): {e}"], used_root
+
     ok = schema.validate(xml_doc)
-
-    if ok:
-        return True, [], used_root
-
-    errors = []
-    for e in schema.error_log:
-        loc = f"line {e.line}, col {e.column}" if e.line else "(no line)"
-        errors.append(f"{loc}: {e.message}")
-
-    return False, errors, used_root
+    errors: list[str] = []
+    if not ok:
+        for err in schema.error_log:
+            errors.append(f"[XSD] {err}")
+    return ok, errors, used_root
 
 
-# =========================
-# Parameter Validation (UUID / OPC UA GUID)
-# =========================
+# ==========================================================
+# UUID helpers
+# ==========================================================
 
 _UUID_RE = re.compile(
     r"^[0-9a-fA-F]{8}-"
@@ -67,92 +65,185 @@ _UUID_RE = re.compile(
     r"[0-9a-fA-F]{12}$"
 )
 
-_OPCUA_NODEID_GUID_RE = re.compile(
-    r"^(?:ns=\d+;|nsu=[^;]+;)?[gG]=("
-    r"[0-9a-fA-F]{8}-"
-    r"[0-9a-fA-F]{4}-"
-    r"[0-9a-fA-F]{4}-"
-    r"[0-9a-fA-F]{4}-"
-    r"[0-9a-fA-F]{12})$"
-)
-
-def _is_opcua_guid(s: str) -> bool:
-    """
-    Accepts OPC UA GUID formats:
-      - 550e8400-e29b-41d4-a716-446655440000
-      - ns=2;g=550e8400-e29b-41d4-a716-446655440000
-      - nsu=urn:your:ns;g=550e8400-e29b-41d4-a716-446655440000
-    Also tolerates a leading prefix before ":" (e.g. "res:...").
-    """
-    return bool(_extract_opcua_guid_from_id(s))
-
 
 def _is_uuid(s: str) -> bool:
-    return bool(s) and bool(_UUID_RE.fullmatch(s.strip()))
+    return bool(_UUID_RE.match(s or ""))
 
 
 def _extract_uuid_from_id(raw_id: str) -> str | None:
     """
-    Accepts:
-      - 550e8400-e29b-41d4-a716-446655440000
-      - res:550e8400-e29b-41d4-a716-446655440000
-      - anyprefix:UUID
+    Extract UUID from formats like:
+      - UUID
+      - prefix:UUID
+      - res:UUID
+      - ...UUID... (UUID embedded)
     """
     if not raw_id:
         return None
-    s = raw_id.strip()
-    if ":" in s:
-        s = s.split(":", 1)[1].strip()
-    return s if _is_uuid(s) else None
+
+    rid = raw_id.strip()
+    if _is_uuid(rid):
+        return rid
+
+    if ":" in rid:
+        last = rid.split(":")[-1].strip()
+        if _is_uuid(last):
+            return last
+
+    m = re.search(
+        r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}",
+        rid,
+    )
+    if m:
+        u = m.group(0)
+        if _is_uuid(u):
+            return u
+
+    return None
+
 
 def _extract_opcua_guid_from_id(raw_id: str) -> str | None:
     """
-    Extract GUID from OPC UA NodeId strings.
-    Accepts:
-      - 550e8400-e29b-41d4-a716-446655440000
-      - res:550e8400-e29b-41d4-a716-446655440000
-      - ns=2;g=550e8400-e29b-41d4-a716-446655440000
-      - nsu=urn:your:ns;g=550e8400-e29b-41d4-a716-446655440000
-      - res:ns=2;g=550e8400-e29b-41d4-a716-446655440000
-    Returns the canonical GUID (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx) or None.
+    Extract GUID UUID from OPC UA NodeId forms such as:
+      - ns=2;g=UUID
+      - nsu=...;g=UUID
+      - UUID
     """
     if not raw_id:
         return None
-    s = raw_id.strip()
-    if ":" in s:
-        s = s.split(":", 1)[1].strip()
-    # plain GUID
-    if _is_uuid(s):
-        return s
-    m = _OPCUA_NODEID_GUID_RE.fullmatch(s)
-    if not m:
-        return None
-    return m.group(1)
+
+    rid = raw_id.strip()
+
+    # allow plain UUID / prefix:UUID / embedded UUID
+    u = _extract_uuid_from_id(rid)
+    if u:
+        return u
+
+    # parse 'g=' segment
+    m = re.search(r"(?:^|;)\s*g\s*=\s*([0-9a-fA-F\-]{36})\s*(?:;|$)", rid)
+    if m:
+        u = m.group(1).strip()
+        if _is_uuid(u):
+            return u
+
+    return _extract_uuid_from_id(rid)
 
 
 def _looks_like_uuid_index(resources_data: dict) -> bool:
     """
-    If caller already passed resources_data as {uuid -> meta}, detect it.
+    Heuristic: if dict keys are UUIDs and values are dict entries or list entries.
     """
     if not isinstance(resources_data, dict) or not resources_data:
         return False
-    # If "most" keys are UUIDs, treat it as UUID index.
-    keys = list(resources_data.keys())[:30]
-    if not keys:
+    sample = list(resources_data.keys())[:3]
+    if not sample:
         return False
-    uuidish = sum(1 for k in keys if isinstance(k, str) and _is_uuid(k.strip()))
-    return uuidish >= max(1, int(len(keys) * 0.7))
+    uuid_like = sum(1 for k in sample if isinstance(k, str) and _is_uuid(k)) >= 2
+    if not uuid_like:
+        return False
+    v = resources_data.get(sample[0])
+    return isinstance(v, dict) or isinstance(v, list)
 
+
+# ==========================================================
+# Deep UUID extraction from arbitrary prop structures
+# ==========================================================
+
+def _collect_uuids_anywhere(obj) -> list[str]:
+    """
+    Recursively collect UUID strings from nested dict/list/str.
+    """
+    found = set()
+
+    def walk(x):
+        if x is None:
+            return
+        if isinstance(x, str):
+            matches = re.findall(
+                r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}",
+                x,
+            )
+            for u in matches:
+                if _is_uuid(u):
+                    found.add(u)
+            return
+        if isinstance(x, dict):
+            for v in x.values():
+                walk(v)
+            return
+        if isinstance(x, (list, tuple, set)):
+            for v in x:
+                walk(v)
+            return
+
+    walk(obj)
+    return list(found)
+
+
+def _extract_uuids_from_prop(prop: dict) -> list[str]:
+    """
+    Return list of UUID candidates from a property dict.
+    Tries common keys first, then falls back to recursive scan.
+    """
+    if not isinstance(prop, dict):
+        return []
+
+    # Common key variants across different parsers / formats
+    key_candidates = [
+        # original keys
+        "propertyRealizedBy", "property_realized_by",
+        # capitalization / spelling variants
+        "PropertyRealizedBy", "propertyRealisedBy", "property_realised_by", "PropertyRealisedBy",
+        "realizedBy", "realisedBy",
+        # reference-ish containers (often nested)
+        "semanticId", "semanticID", "semantic_id",
+        "reference", "ref", "references",
+        "id", "ID", "identifier",
+    ]
+
+    uuids: list[str] = []
+
+    # 1) Try candidate keys
+    for k in key_candidates:
+        if k not in prop:
+            continue
+        v = prop.get(k)
+        if isinstance(v, str):
+            u = _extract_uuid_from_id(v)
+            if u:
+                uuids.append(u)
+            else:
+                uuids.extend(_collect_uuids_anywhere(v))
+        else:
+            uuids.extend(_collect_uuids_anywhere(v))
+
+    # 2) If still nothing, scan entire prop (more aggressive)
+    if not uuids:
+        uuids = _collect_uuids_anywhere(prop)
+
+    # De-dup while preserving order
+    deduped = []
+    seen = set()
+    for u in uuids:
+        if not _is_uuid(u):
+            continue
+        if u in seen:
+            continue
+        seen.add(u)
+        deduped.append(u)
+    return deduped
+
+
+# ==========================================================
+# Capability -> UUID index (store ALL candidates)
+# ==========================================================
 
 def build_uuid_index_from_capabilities(resources_data: dict) -> tuple[dict, list[str]]:
     """
-    Convert parsed AAS capabilities (structure used in Workers/Results) into:
-        uuid_index = { uuid: {resource_key, resource, capability_name, property_name, unit, ...} }
-    Supports both keys:
-        - propertyRealizedBy
-        - property_realized_by
+    Build uuid_index = { uuid: [entry, entry, ...] }
 
-    Returns: (uuid_index, warnings)
+    entry contains:
+      resource_key, resource, capability_name, property_name, property_unit, ...
     """
     warnings: list[str] = []
     uuid_index: dict = {}
@@ -169,18 +260,16 @@ def build_uuid_index_from_capabilities(resources_data: dict) -> tuple[dict, list
         return uuid_index, warnings
 
     for resource_key, caps_list in resources_data.items():
-        # resource_key example: "resource: 2025-04_HC29"
-        if not isinstance(caps_list, list):
-            continue
-
-        # best-effort resource name
+        # derive a short resource name (often HCxx) from the key
         resource_name = None
         if isinstance(resource_key, str):
-            # often "..._HC29" at end
             if "_" in resource_key:
                 resource_name = resource_key.split("_")[-1].strip()
             else:
                 resource_name = resource_key.strip()
+
+        if not isinstance(caps_list, list):
+            continue
 
         for block in caps_list:
             if not isinstance(block, dict):
@@ -201,61 +290,62 @@ def build_uuid_index_from_capabilities(resources_data: dict) -> tuple[dict, list
                 if not isinstance(prop, dict):
                     continue
 
-                raw_uuid = prop.get("propertyRealizedBy")
-                if not raw_uuid:
-                    raw_uuid = prop.get("property_realized_by")
-
-                if not raw_uuid or not isinstance(raw_uuid, str):
+                uuids = _extract_uuids_from_prop(prop)
+                if not uuids:
                     continue
 
-                uuid = raw_uuid.strip()
-                if not _is_uuid(uuid):
-                    # some files contain "" or trailing spaces; ignore non-UUID values
-                    continue
+                for uuid in uuids:
+                    entry = {
+                        "uuid": uuid,
+                        "resource_key": resource_key,
+                        "resource": resource_name,
+                        "capability_name": cap_name,
+                        "property_name": prop.get("property_name"),
+                        "property_ID": prop.get("property_ID"),
+                        "property_unit": prop.get("property_unit"),
+                        "valueType": prop.get("valueType"),
+                        "raw_property": prop,
+                    }
 
-                entry = {
-                    "uuid": uuid,
-                    "resource_key": resource_key,
-                    "resource": resource_name,
-                    "capability_name": cap_name,
-                    "property_name": prop.get("property_name"),
-                    "property_ID": prop.get("property_ID"),
-                    "property_unit": prop.get("property_unit"),
-                    "valueType": prop.get("valueType"),
-                    "raw_property": prop,
-                }
-
-                # Duplicate UUID handling:
-                if uuid in uuid_index:
-                    prev = uuid_index[uuid]
-                    # If duplicate refers to different place, warn once.
-                    if (prev.get("resource_key") != entry.get("resource_key") or
-                        prev.get("capability_name") != entry.get("capability_name") or
-                        prev.get("property_name") != entry.get("property_name")):
-                        warnings.append(
-                            f"[UUID-INDEX] Duplicate UUID {uuid} found in multiple properties. "
-                            f"Keeping first: {prev.get('resource_key')} / {prev.get('capability_name')} / {prev.get('property_name')}"
-                        )
-                    continue
-
-                uuid_index[uuid] = entry
+                    if uuid in uuid_index:
+                        uuid_index[uuid].append(entry)
+                        prev = uuid_index[uuid][0]
+                        if (
+                            prev.get("resource_key") != entry.get("resource_key")
+                            or prev.get("capability_name") != entry.get("capability_name")
+                            or prev.get("property_name") != entry.get("property_name")
+                        ):
+                            warnings.append(
+                                f"[UUID-INDEX] Duplicate UUID {uuid} found in multiple properties. "
+                                f"Candidates now: {len(uuid_index[uuid])}. "
+                                f"First: {prev.get('resource_key')} / {prev.get('capability_name')} / {prev.get('property_name')}"
+                            )
+                    else:
+                        uuid_index[uuid] = [entry]
 
     return uuid_index, warnings
 
 
-def validate_master_recipe_parameters(master_recipe_xml_path: str,
-                                      resources_data: dict,
-                                      id_format: str = "opca"):
-    """
-    Parameter ID validation.
+# ==========================================================
+# MasterRecipe Parameter Validation (HCxx preference)
+# ==========================================================
 
-    id_format:
-      - "uuid": expects a plain UUID (optionally prefixed with "res:" or anyprefix:)
-      - "opcua": accepts OPC UA GUID NodeId forms (plain UUID, or ns=...;g=UUID / nsu=...;g=UUID)
+def validate_master_recipe_parameters(
+    master_recipe_xml_path: str,
+    resources_data: dict,
+    id_format: str = "opcua"
+):
+    """
+    Returns:
+      ok(bool), errors(list[str]), warnings(list[str]), checked(int), details(list[dict])
 
     Validation:
-      - Parameter/ID must contain a valid UUID (optionally with prefix like "res:UUID")
-      - UUID must exist in parsed AAS capability properties (propertyRealizedBy / property_realized_by)
+      - Extract UUID from Parameter/ID (uuid / prefix:uuid / OPC UA g=uuid)
+      - UUID must exist in uuid_index built from capabilities
+
+    HC preference:
+      If UUID has multiple candidates, prefer candidate whose resource_key/resource matches HC token
+      extracted from Description (e.g. 'HC29_...').
     """
     parser = etree.XMLParser(remove_blank_text=True, recover=True, huge_tree=True)
     doc = etree.parse(str(master_recipe_xml_path), parser)
@@ -290,7 +380,7 @@ def validate_master_recipe_parameters(master_recipe_xml_path: str,
             details.append({
                 "status": "INVALID_ID",
                 "description": desc,
-                "raw_id": raw_id
+                "raw_id": raw_id,
             })
             continue
 
@@ -299,11 +389,44 @@ def validate_master_recipe_parameters(master_recipe_xml_path: str,
             details.append({
                 "status": "UNKNOWN_UUID",
                 "description": desc,
-                "uuid": uuid
+                "uuid": uuid,
             })
             continue
 
-        hit = uuid_index[uuid]
+        cands = uuid_index[uuid]
+        if isinstance(cands, dict):
+            cands = [cands]
+
+        # IMPORTANT: works for "HC29_..." (no \b word-boundary)
+        m = re.search(r"(HC\d+)", desc or "")
+        expected_hc = m.group(1) if m else None
+
+        hit = None
+        if expected_hc:
+            # 1) Prefer resource_key containing the HC token (e.g. "..._HC29")
+            for c in cands:
+                rk = (c.get("resource_key") or "")
+                if expected_hc in str(rk):
+                    hit = c
+                    break
+            # 2) Or the derived resource name equals HCxx
+            if hit is None:
+                for c in cands:
+                    if (c.get("resource") or "").strip() == expected_hc:
+                        hit = c
+                        break
+
+            # If multiple candidates exist but none match expected HC, log a hint
+            if hit is None and len(cands) > 1:
+                cand_keys = [str(c.get("resource_key")) for c in cands]
+                warnings.append(
+                    f"[HC-PREF] {desc}: expected {expected_hc}, but candidates are: {cand_keys}"
+                )
+
+        # 3) Fallback: first candidate
+        if hit is None:
+            hit = cands[0]
+
         details.append({
             "status": "FOUND",
             "description": desc,
@@ -313,6 +436,7 @@ def validate_master_recipe_parameters(master_recipe_xml_path: str,
             "capability_name": hit.get("capability_name"),
             "property_name": hit.get("property_name"),
             "property_unit": hit.get("property_unit"),
+            "candidates_count": len(cands),
         })
 
     return len(errors) == 0, errors, warnings, checked, details

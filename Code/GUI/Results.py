@@ -355,10 +355,12 @@ class ResultsPage(QWidget):
             self._append_log(f"[PARAM-VALIDATION] Matched: {len(found_items)} | Missing: {len(missing_items)}")
 
             for d in found_items[:50]:
-                cand = d.get('matched_candidate')
-                rk = d.get('matched_resource')
-                sc = d.get('score', 0.0)
-                self._append_log(f"  OK: {d.get('description')} -> '{cand}' in {rk}, score={sc:.2f}")
+                self._append_log(
+                    f"  OK: {d.get('description')} -> uuid={d.get('uuid')} "
+                    f"in {d.get('resource_key')} / {d.get('capability_name')} / {d.get('property_name')} "
+                    f"({d.get('property_unit')})"
+                )
+
 
             for w in warnings[:100]:
                 self._append_log(f"  WARN: {w}")
