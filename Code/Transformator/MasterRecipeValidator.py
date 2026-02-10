@@ -11,13 +11,19 @@ def _guess_root_xsd(allschema_dir: str) -> str:
     p = Path(allschema_dir)
     xsds = sorted([x for x in p.rglob("*.xsd") if x.is_file()])
     # prefer masterrecipe.xsd if present
-    for x in xsds:
+
+    allschemas = next(iter(p.rglob("AllSchemas.xsd")), None)
+    if allschemas:
+        return str(allschemas)
+    batchinfo = next(iter(p.rglob("BatchML-BatchInformation.xsd")), None)
+    if batchinfo:
+        return str(batchinfo)
+    for x in p.rglob("*.xsd"):
         if "masterrecipe" in x.name.lower():
-            return str(x)
-    if xsds:
-        xsds.sort(key=lambda x: x.stat().st_size, reverse=True)
-        return str(xsds[0])
-    return ""
+             return str(x)
+    xsds = sorted([x for x in p.rglob("*.xsd") if x.is_file()],
+                  key=lambda x: x.stat().st_size, reverse=True)
+    return str(xsds[0]) if xsds else ""
 
 
 def validate_master_recipe_xml(
@@ -54,7 +60,7 @@ def validate_master_recipe_xml(
 
 
 # ==========================================================
-# UUID helpers
+# UUID checker
 # ==========================================================
 
 _UUID_RE = re.compile(
